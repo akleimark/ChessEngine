@@ -35,9 +35,7 @@ void MoveGenerator::generate(const int &side)
                 }
             }
         }
-
         //Springardrag
-
         if(chessPosition[index]->getType() == KNIGHT)
         {
             int directions[] = {31, -31, 33, -33, 18, -18, 14, -14};
@@ -57,29 +55,24 @@ void MoveGenerator::generate(const int &side)
                 }
             }
         }
-
         // Torndrag och raka damdrag
         if(chessPosition[index]->getType() == ROOK || chessPosition[index]->getType() == QUEEN)
         {
             int directions [] = {1, -1, 16, -16};
-
             for(unsigned int i = 0; i < 4; i++)
             {
                 int square = index + directions[i];
-
                 while(!ChessPosition::isOffTheBoard(square))
                 {
                     if(chessPosition[square] == nullptr)
                     {
                         list.push_back(ChessMove(index, square));
                     }
-
                     else if(chessPosition[square]->getColor() != side)
                     {
                         list.push_back(ChessMove(index, square, CAPTURE_MOVE));
                         break;
                     }
-
                     else if((chessPosition[square]->getColor() == side))
                     {
                         break;
@@ -88,29 +81,24 @@ void MoveGenerator::generate(const int &side)
                 }
             }
         }
-
         // Löpardrag och diagonala damdrag
         if(chessPosition[index]->getType() == BISHOP || chessPosition[index]->getType() == QUEEN)
         {
             int directions [] = {17, -17, 15, -15};
-
             for(unsigned int i = 0; i < 4; i++)
             {
                 int square = index + directions[i];
-
                 while(!ChessPosition::isOffTheBoard(square))
                 {
                     if(chessPosition[square] == nullptr)
                     {
                         list.push_back(ChessMove(index, square));
                     }
-
                     else if(chessPosition[square]->getColor() != side)
                     {
                         list.push_back(ChessMove(index, square, CAPTURE_MOVE));
                         break;
                     }
-
                     else if((chessPosition[square]->getColor() == side))
                     {
                         break;
@@ -141,6 +129,24 @@ void MoveGenerator::generate(const int &side)
                         list.push_back(ChessMove(index, index + directions[i], CAPTURE_MOVE));
                     }
                 }
+                //Promovering
+                if(chessPosition[index]->getRank() == 7 && chessPosition[index + 16] == nullptr)
+                {
+                    list.push_back(ChessMove(index, index + 16, QUIET_KNIGHT_PROMOTION));
+                    list.push_back(ChessMove(index, index + 16, QUIET_BISHOP_PROMOTION));
+                    list.push_back(ChessMove(index, index + 16, QUIET_ROOK_PROMOTION));
+                    list.push_back(ChessMove(index, index + 16, QUIET_QUEEN_PROMOTION));
+                }
+                for(int i = 0; i < 2; i++)
+                {
+                    if(chessPosition[index]->getRank() == 7 && chessPosition[index + directions[i]] != nullptr && !ChessPosition::isOffTheBoard(index + directions[i]) && chessPosition[index + directions[i]]->getColor() == BLACK)
+                    {
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_KNIGHT_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_BISHOP_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_ROOK_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_QUEEN_PROMOTION));
+                    }
+                }
             }
             else
             {
@@ -160,6 +166,24 @@ void MoveGenerator::generate(const int &side)
                         list.push_back(ChessMove(index, index - directions[i], CAPTURE_MOVE));
                     }
                 }
+                //Promovering
+                if(chessPosition[index]->getRank() == 2 && chessPosition[index - 16] == nullptr)
+                {
+                    list.push_back(ChessMove(index, index - 16, QUIET_KNIGHT_PROMOTION));
+                    list.push_back(ChessMove(index, index - 16, QUIET_BISHOP_PROMOTION));
+                    list.push_back(ChessMove(index, index - 16, QUIET_ROOK_PROMOTION));
+                    list.push_back(ChessMove(index, index - 16, QUIET_QUEEN_PROMOTION));
+                }
+                for(int i = 0; i < 2; i++)
+                {
+                    if(chessPosition[index]->getRank() == 2 && chessPosition[index - directions[i]] != nullptr && !ChessPosition::isOffTheBoard(index - directions[i]) && chessPosition[index - directions[i]]->getColor() == WHITE)
+                    {
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_KNIGHT_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_BISHOP_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_ROOK_PROMOTION));
+                        list.push_back(ChessMove(index, index + directions[i], QUIET_QUEEN_PROMOTION));
+                    }
+                }
             }
         }
     }
@@ -172,7 +196,6 @@ std::ostream& operator<<(std::ostream &os, const MoveGenerator &generator)
     {
         os << *iterator << std::endl;
     }
-
     return os;
 }
 
