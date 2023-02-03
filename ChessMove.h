@@ -25,7 +25,6 @@ class ChessMove
         bool operator<(const ChessMove &chessMove) const { return chessMove.getScore() < score; }
         bool operator==(const ChessMove &chessMove);
 
-
     private:
         unsigned int fromSquare;
         unsigned int toSquare;
@@ -35,7 +34,5 @@ class ChessMove
 };
 
 std::ostream& operator<<(std::ostream &os, const ChessMove &chessMove);
-
-
 
 #endif // CHESSMOVE_H
