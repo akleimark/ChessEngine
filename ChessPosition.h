@@ -6,7 +6,6 @@
 #include "ChessMove.h"
 
 class MoveGenerator;
-
 class ChessPosition
 {
     public:
@@ -32,7 +31,6 @@ class ChessPosition
         int sideToMove;
         int enPassantValue;
         MoveGenerator *moveGenerator;
-
 };
 
 std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition);

@@ -19,7 +19,6 @@ ChessPosition::ChessPosition()
     {
         squares[index] = nullptr;
     }
-
     squares[a1] = new WhiteRook(a1);
     squares[b1] = new WhiteKnight(b1);
     squares[c1] = new WhiteBishop(c1);
@@ -33,7 +32,6 @@ ChessPosition::ChessPosition()
     {
         squares[square] = new WhitePawn(square);
     }
-
     squares[a8] = new BlackRook(a8);
     squares[b8] = new BlackKnight(b8);
     squares[c8] = new BlackBishop(c8);
@@ -60,7 +58,6 @@ ChessPosition::ChessPosition(const std::string &fenString)
     {
         squares[index] = nullptr;
     }
-
     std::vector<std::string> list;
     misc::split(fenString, ' ', list);
 
@@ -68,7 +65,6 @@ ChessPosition::ChessPosition(const std::string &fenString)
     {
         throw std::runtime_error("Felaktig fen-sträng");
     }
-
     unsigned int square = a8;
     int row = 7;
     for(int index = 0; index < list[0].size(); index++)
@@ -79,7 +75,6 @@ ChessPosition::ChessPosition(const std::string &fenString)
             square = row << 4;
             continue;
         }
-
         if(list[0][index] == 'r')
         {
             squares[square] = new BlackRook(square);
@@ -104,7 +99,6 @@ ChessPosition::ChessPosition(const std::string &fenString)
         {
             squares[square] = new BlackPawn(square);
         }
-
         else if(list[0][index] == 'R')
         {
             squares[square] = new WhiteRook(square);
@@ -129,44 +123,36 @@ ChessPosition::ChessPosition(const std::string &fenString)
         {
             squares[square] = new WhitePawn(square);
         }
-
         else if(list[0][index] == '2')
         {
             ++square;
         }
-
         else if(list[0][index] == '3')
         {
             square += 2;
         }
-
         else if(list[0][index] == '4')
         {
             square += 3;
         }
-
         else if(list[0][index] == '5')
         {
             square += 4;
         }
-
         else if(list[0][index] == '6')
         {
             square += 5;
         }
-
         else if(list[0][index] == '7')
         {
             square += 6;
         }
-
         ++square;
     }
     if(!(list[1] == "b" || list[1] == "w"))
     {
         throw std::runtime_error("Felaktig fen-sträng.");
     }
-
     if(list[1] == "w")
     {
         sideToMove = WHITE;
@@ -174,6 +160,14 @@ ChessPosition::ChessPosition(const std::string &fenString)
     else
     {
         sideToMove = BLACK;
+    }
+    try
+    {
+        enPassantValue = ChessPosition::getSquareNumber(list[3]);
+    }
+    catch(std::runtime_error &error)
+    {
+        throw;
     }
     moveGenerator = new MoveGenerator(*this);
 }
@@ -191,7 +185,6 @@ ChessPosition::~ChessPosition()
 {
     std::cout << "Destructor" << std::endl;
     delete [] squares;
-
     if(moveGenerator != nullptr)
     {
         delete moveGenerator;
@@ -208,8 +201,6 @@ unsigned int ChessPosition::getColor(const unsigned int &index) const
     return squares[index]->getColor();
 }
 
-
-
 void ChessPosition::makeMove(const ChessMove &chessMove)
 {
     const int FROM_SQUARE = chessMove.getFromSquare();
@@ -220,12 +211,10 @@ void ChessPosition::makeMove(const ChessMove &chessMove)
         delete squares[TO_SQUARE];
         squares[TO_SQUARE] = nullptr;
     }
-
     squares[FROM_SQUARE]->setLocation(TO_SQUARE);
     squares[TO_SQUARE] = squares[FROM_SQUARE];
     squares[FROM_SQUARE] = nullptr;
 }
-
 
 std::string ChessPosition::getSquareName(const unsigned int &squareIndex)
 {
@@ -248,6 +237,11 @@ std::string ChessPosition::getSquareName(const unsigned int &squareIndex)
 
 unsigned int ChessPosition::getSquareNumber(const std::string &squareName)
 {
+    if(squareName == "-")
+    {
+        return OFF_THE_BOARD;
+    }
+
     if(squareName.length() != 2)
     {
         throw std::runtime_error("Felaktigt argument angivet.");
@@ -272,11 +266,9 @@ unsigned int ChessPosition::getRank(const unsigned int &squareIndex)
 std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
 {
     const unsigned int SPACE = 10;
-
     for(int row = 7; row >= 0; row--)
     {
         os << "\n";
-
         for(unsigned int column = 0; column < 16; column++ )
         {
             const int SQUARE_INDEX = row * 16 + column;
@@ -295,8 +287,8 @@ std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
             }
         }
     }
-
     os << "--------------------------------------------------------------------------------" << std::endl
-       << "Side to move: " << chessPosition.getSideToMove() << std::endl;
+       << "Side to move: " << chessPosition.getSideToMove() << std::endl
+       << "EnPassant: " << ChessPosition::getSquareName(chessPosition.getEnPassantValue()) << std::endl;
     return os;
 }
