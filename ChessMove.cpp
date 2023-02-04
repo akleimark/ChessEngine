@@ -36,7 +36,11 @@ std::ostream& operator<<(std::ostream &os, const ChessMove &chessMove)
     }
     os << ChessPosition::getSquareName(chessMove.getToSquare());
 
-    if(chessMove.getFlag() == QUIET_KNIGHT_PROMOTION || chessMove.getFlag() == CAPTURE_KNIGHT_PROMOTION)
+    if (chessMove.getFlag() == EN_PASSANT_CAPTURE)
+    {
+        os << " e.p";
+    }
+    else if(chessMove.getFlag() == QUIET_KNIGHT_PROMOTION || chessMove.getFlag() == CAPTURE_KNIGHT_PROMOTION)
     {
         os << "N";
     }
