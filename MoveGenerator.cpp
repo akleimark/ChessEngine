@@ -18,7 +18,7 @@ void MoveGenerator::generate(const int &side)
         // Kungsdrag
         if(chessPosition[index]->getType() == KING)
         {
-            int directions[] = {1, -1, 16, -16, 17, -17, 15, -15};
+            const int directions[] = {1, -1, 16, -16, 17, -17, 15, -15};
             for(unsigned int i = 0; i < 8; i++)
             {
                 if(ChessPosition::isOffTheBoard(index + directions[i]))
@@ -38,7 +38,7 @@ void MoveGenerator::generate(const int &side)
         //Springardrag
         if(chessPosition[index]->getType() == KNIGHT)
         {
-            int directions[] = {31, -31, 33, -33, 18, -18, 14, -14};
+            const int directions[] = {31, -31, 33, -33, 18, -18, 14, -14};
             for(unsigned int i = 0; i < 8; i++)
             {
                 if(ChessPosition::isOffTheBoard(index + directions[i]))
@@ -58,7 +58,7 @@ void MoveGenerator::generate(const int &side)
         // Torndrag och raka damdrag
         if(chessPosition[index]->getType() == ROOK || chessPosition[index]->getType() == QUEEN)
         {
-            int directions [] = {1, -1, 16, -16};
+            const int directions [] = {1, -1, 16, -16};
             for(unsigned int i = 0; i < 4; i++)
             {
                 int square = index + directions[i];
@@ -84,7 +84,7 @@ void MoveGenerator::generate(const int &side)
         // Löpardrag och diagonala damdrag
         if(chessPosition[index]->getType() == BISHOP || chessPosition[index]->getType() == QUEEN)
         {
-            int directions [] = {17, -17, 15, -15};
+            const int directions [] = {17, -17, 15, -15};
             for(unsigned int i = 0; i < 4; i++)
             {
                 int square = index + directions[i];
@@ -121,7 +121,7 @@ void MoveGenerator::generate(const int &side)
                        list.push_back(ChessMove(index, index + 32, DOUBLE_PAWN_MOVE));
                    }
                 }
-                int directions [] = {15, 17};
+                const int directions [] = {15, 17};
                 for(int i = 0; i < 2; i++)
                 {
                     if(chessPosition[index]->getRank() < 7 && chessPosition[index + directions[i]] != nullptr && chessPosition[index + directions[i]]->getColor() == BLACK)
@@ -158,7 +158,7 @@ void MoveGenerator::generate(const int &side)
                        list.push_back(ChessMove(index, index - 32, DOUBLE_PAWN_MOVE));
                    }
                 }
-                int directions [] = {15, 17};
+                const int directions [] = {15, 17};
                 for(int i = 0; i < 2; i++)
                 {
                     if(chessPosition[index]->getRank() >= 2 && chessPosition[index - directions[i]] != nullptr && chessPosition[index - directions[i]]->getColor() == WHITE)

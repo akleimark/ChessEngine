@@ -7,7 +7,7 @@
 class MoveGenerator
 {
     public:
-        MoveGenerator(const ChessPosition &pChessPosition);
+        explicit MoveGenerator(const ChessPosition &pChessPosition);
         void generate(const int &side);
         const ChessMove& operator[](const unsigned int &index) const { return list[index]; }
         ChessMove get(const unsigned int &index) const { return list.at(index); }

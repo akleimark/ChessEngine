@@ -26,97 +26,97 @@ class ChessPiece
 class WhitePawn : public ChessPiece
 {
     public:
-        WhitePawn(const unsigned int &pLocation):
+        explicit WhitePawn(const unsigned int &pLocation):
             ChessPiece(WHITE, PAWN, pLocation) {}
-        virtual char getShortName() const { return 'P'; }
+        virtual char getShortName() const override { return 'P'; }
 };
 
 class WhiteRook : public ChessPiece
 {
     public:
-        WhiteRook(const unsigned int &pLocation):
+        explicit WhiteRook(const unsigned int &pLocation):
             ChessPiece(WHITE, ROOK, pLocation) {}
-        virtual char getShortName() const { return 'R'; }
+        virtual char getShortName() const override { return 'R'; }
 };
 
 class WhiteKnight : public ChessPiece
 {
     public:
-        WhiteKnight(const unsigned int &pLocation):
+        explicit WhiteKnight(const unsigned int &pLocation):
             ChessPiece(WHITE, KNIGHT, pLocation) {}
-        virtual char getShortName() const { return 'N'; }
+        virtual char getShortName() const override { return 'N'; }
 };
 
 class WhiteBishop : public ChessPiece
 {
     public:
-        WhiteBishop(const unsigned int &pLocation):
+        explicit WhiteBishop(const unsigned int &pLocation):
             ChessPiece(WHITE, BISHOP, pLocation) {}
-        virtual char getShortName() const { return 'B'; }
+        virtual char getShortName() const override { return 'B'; }
 };
 
 class WhiteQueen : public ChessPiece
 {
     public:
-        WhiteQueen(const unsigned int &pLocation):
+        explicit WhiteQueen(const unsigned int &pLocation):
             ChessPiece(WHITE, QUEEN, pLocation) {}
-        virtual char getShortName() const { return 'Q'; }
+        virtual char getShortName() const override { return 'Q'; }
 };
 
 class WhiteKing : public ChessPiece
 {
     public:
-        WhiteKing(const unsigned int &pLocation):
+        explicit WhiteKing(const unsigned int &pLocation):
             ChessPiece(WHITE, KING, pLocation) {}
-        virtual char getShortName() const { return 'K'; }
+        virtual char getShortName() const override { return 'K'; }
 };
 
 class BlackPawn : public ChessPiece
 {
     public:
-        BlackPawn(const unsigned int &pLocation):
+        explicit BlackPawn(const unsigned int &pLocation):
             ChessPiece(BLACK, PAWN, pLocation) {}
-        virtual char getShortName() const { return 'p'; }
+        virtual char getShortName() const override { return 'p'; }
 };
 
 class BlackRook : public ChessPiece
 {
     public:
-        BlackRook(const unsigned int &pLocation):
+        explicit BlackRook(const unsigned int &pLocation):
             ChessPiece(BLACK, ROOK, pLocation) {}
-        virtual char getShortName() const { return 'r'; }
+        virtual char getShortName() const override { return 'r'; }
 };
 
 class BlackKnight : public ChessPiece
 {
     public:
-        BlackKnight(const unsigned int &pLocation):
+        explicit BlackKnight(const unsigned int &pLocation):
             ChessPiece(BLACK, KNIGHT, pLocation) {}
-        virtual char getShortName() const { return 'n'; }
+        virtual char getShortName() const override { return 'n'; }
 };
 
 class BlackBishop : public ChessPiece
 {
     public:
-        BlackBishop(const unsigned int &pLocation):
+        explicit BlackBishop(const unsigned int &pLocation):
             ChessPiece(BLACK, BISHOP, pLocation) {}
-        virtual char getShortName() const { return 'b'; }
+        virtual char getShortName() const override { return 'b'; }
 };
 
 class BlackQueen : public ChessPiece
 {
     public:
-        BlackQueen(const unsigned int &pLocation):
+        explicit BlackQueen(const unsigned int &pLocation):
             ChessPiece(BLACK, QUEEN, pLocation) {}
-        virtual char getShortName() const { return 'q'; }
+        virtual char getShortName() const override { return 'q'; }
 };
 
 class BlackKing : public ChessPiece
 {
     public:
-        BlackKing(const unsigned int &pLocation):
+        explicit BlackKing(const unsigned int &pLocation):
             ChessPiece(BLACK, KING, pLocation) {}
-        virtual char getShortName() const { return 'k'; }
+        virtual char getShortName() const override { return 'k'; }
 };
 
 

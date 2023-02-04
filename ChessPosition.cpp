@@ -165,7 +165,7 @@ ChessPosition::ChessPosition(const std::string &fenString)
     {
         enPassantValue = ChessPosition::getSquareNumber(list[3]);
     }
-    catch(std::runtime_error &error)
+    catch(const std::runtime_error &error)
     {
         throw;
     }
@@ -190,6 +190,11 @@ ChessPosition::~ChessPosition()
         delete moveGenerator;
         moveGenerator = nullptr;
     }
+}
+
+ChessPosition ChessPosition::operator=(const ChessPosition &chessPosition)
+{
+
 }
 
 unsigned int ChessPosition::getColor(const unsigned int &index) const

@@ -10,9 +10,10 @@ class ChessPosition
 {
     public:
         ChessPosition();
-        ChessPosition(const std::string &fenString);
+        explicit ChessPosition(const std::string &fenString);
         ChessPosition(const ChessPosition &chessPosition);
         ~ChessPosition();
+        ChessPosition operator=(const ChessPosition &chessPosition);
         bool static isOffTheBoard(const unsigned int &squareIndex) { return squareIndex & 0x88; }
         static std::string getSquareName(const unsigned int &squareIndex);
         static unsigned int getSquareNumber(const std::string &squareName);
