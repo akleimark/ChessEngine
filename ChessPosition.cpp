@@ -194,6 +194,18 @@ ChessPosition::~ChessPosition()
 
 ChessPosition ChessPosition::operator=(const ChessPosition &chessPosition)
 {
+    if(this == &chessPosition)
+    {
+        return *this;
+    }
+
+    squares = new ChessPiece*[128];
+    memcpy(squares, chessPosition.squares, 128 * sizeof(*chessPosition.squares));
+    sideToMove = chessPosition.sideToMove;
+    moveGenerator = new MoveGenerator(*this);
+    enPassantValue = chessPosition.enPassantValue;
+    return *this;
+
 
 }
 
