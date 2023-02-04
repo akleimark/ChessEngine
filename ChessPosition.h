@@ -12,6 +12,7 @@ class ChessPosition
         ChessPosition();
         explicit ChessPosition(const std::string &fenString);
         ChessPosition(const ChessPosition &chessPosition);
+        ChessPosition(ChessPosition &&chessPosition);
         ~ChessPosition();
         ChessPosition operator=(const ChessPosition &chessPosition);
         bool static isOffTheBoard(const unsigned int &squareIndex) { return squareIndex & 0x88; }

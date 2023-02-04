@@ -9,9 +9,8 @@
 #include <string.h>
 
 /**
- * @brief ChessPosition::ChessPosition
+ * @brief Den här konstruktorn skapar en schackposition utifrån startställningen.
  */
-
 ChessPosition::ChessPosition()
 {
     squares = new ChessPiece*[128];
@@ -50,7 +49,10 @@ ChessPosition::ChessPosition()
     moveGenerator = new MoveGenerator(*this);
     enPassantValue = OFF_THE_BOARD;
 }
-
+/**
+ * @brief Den här konstruktorn skapar en schackposition utifrån en angiven fen-sträng.
+ * @param fenString: den fen-sträng som används för att skapa schackpositionen.
+ */
 ChessPosition::ChessPosition(const std::string &fenString)
 {
     squares = new ChessPiece*[128];
@@ -181,9 +183,18 @@ ChessPosition::ChessPosition(const ChessPosition &chessPosition)
     enPassantValue = chessPosition.enPassantValue;
 }
 
+ChessPosition::ChessPosition(ChessPosition &&chessPosition)
+{
+    std::cout << "Move constructor" << std::endl;
+    sideToMove = chessPosition.sideToMove;
+    moveGenerator = nullptr;
+    enPassantValue = chessPosition.enPassantValue;
+    moveGenerator = nullptr;
+    squares = nullptr;
+}
+
 ChessPosition::~ChessPosition()
 {
-    std::cout << "Destructor" << std::endl;
     delete [] squares;
     if(moveGenerator != nullptr)
     {
@@ -205,10 +216,13 @@ ChessPosition ChessPosition::operator=(const ChessPosition &chessPosition)
     moveGenerator = new MoveGenerator(*this);
     enPassantValue = chessPosition.enPassantValue;
     return *this;
-
-
 }
-
+/**
+ * @brief Den här funktionen tar fram vem av spelarna som angivet inde tillhör. Om det angivna indexet är en
+ * tom ruta, returneras i stället NO_COLOR.
+ * @param index: anger vilket index enligt systemet 0x88, som man vill få fram färgen för.
+ * @return Om pjäsen tillhör vit, returneras WHITE; om pjäsen tillhör svart, returneras BLACK; om rutan är tom, returneras NO_COLOR.
+ */
 unsigned int ChessPosition::getColor(const unsigned int &index) const
 {
     if(ChessPosition::isOffTheBoard(index) || squares[index] == nullptr)
@@ -218,6 +232,10 @@ unsigned int ChessPosition::getColor(const unsigned int &index) const
     return squares[index]->getColor();
 }
 
+/**
+ * @brief Den här funktionen körs varje gång, som ett drag utförs.
+ * @param chessMove: den här parametern anger vilket schackdrag som skall utföras.
+ */
 void ChessPosition::makeMove(const ChessMove &chessMove)
 {
     const int FROM_SQUARE = chessMove.getFromSquare();
@@ -233,6 +251,11 @@ void ChessPosition::makeMove(const ChessMove &chessMove)
     squares[FROM_SQUARE] = nullptr;
 }
 
+/**
+ * @brief Den här klassfunktionen tar fram namnet på angivet index. Exempelvis returneras "a1", om squareIndex = 0.
+ * @param squareIndex: ett index mellan 0 och 127.
+ * @return Namnet på det index, som används.
+ */
 std::string ChessPosition::getSquareName(const unsigned int &squareIndex)
 {
     if(squareIndex == OFF_THE_BOARD)
@@ -252,6 +275,11 @@ std::string ChessPosition::getSquareName(const unsigned int &squareIndex)
     return ss.str();
 }
 
+/**
+ * @brief Den här klassfunktionen ar fram det index enligt 0x88-systemet, som angivet argument (en textsträng) motsvarar. Exempelvis returneras 0, om argumentet har värdet "a1".
+ * @param squareName : avser en textsträng (exempelvis 'e4')
+ * @return index enligt 0x88-systemet.
+ */
 unsigned int ChessPosition::getSquareNumber(const std::string &squareName)
 {
     if(squareName == "-")
@@ -275,11 +303,22 @@ unsigned int ChessPosition::getSquareNumber(const std::string &squareName)
     return RANK_NUMBER * 16 + FILE_NUMBER;
 }
 
+/**
+ * @brief Den här klassfunktionen tar fram den rad som ett visst index har.
+ * @param squareIndex : det index, som man vill få fram radnumret för.
+ * @return Ett värde mellan 1 och 8 returneras.
+ */
 unsigned int ChessPosition::getRank(const unsigned int &squareIndex)
 {
     return (squareIndex >> 4) + 1;
 }
 
+
+/**
+ * @brief Den här operatoröverlagringen används för att kunna skriva ut en schackposition till std::cout.
+ * @param chessPosition: anger den schackposition, som man vill skriva ut detaljer kring.
+
+ */
 std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
 {
     const unsigned int SPACE = 10;
@@ -305,7 +344,16 @@ std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
         }
     }
     os << "--------------------------------------------------------------------------------" << std::endl
-       << "Side to move: " << chessPosition.getSideToMove() << std::endl
-       << "EnPassant: " << ChessPosition::getSquareName(chessPosition.getEnPassantValue()) << std::endl;
+       << "Side to move: ";
+    if(chessPosition.getSideToMove() == WHITE)
+    {
+        os << "white";
+    }
+    else
+    {
+        os << "black";
+    }
+
+    os << std::endl << "EnPassant: " << ChessPosition::getSquareName(chessPosition.getEnPassantValue()) << std::endl;
     return os;
 }
