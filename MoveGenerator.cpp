@@ -147,6 +147,16 @@ void MoveGenerator::generate(const int &side)
                         list.push_back(ChessMove(index, index + directions[i], QUIET_QUEEN_PROMOTION));
                     }
                 }
+                // En passant
+                for(int i = 0; i < 2; i++)
+                {
+                    if(chessPosition[index]->getRank() == 2 && chessPosition[index + directions[i]] == nullptr &&
+                            index + directions[i] == chessPosition.getEnPassantValue())
+                    {
+                        list.push_back(ChessMove(index, index + directions[i], EN_PASSANT_CAPTURE));
+                    }
+                }
+
             }
             else
             {
@@ -182,6 +192,16 @@ void MoveGenerator::generate(const int &side)
                         list.push_back(ChessMove(index, index + directions[i], QUIET_BISHOP_PROMOTION));
                         list.push_back(ChessMove(index, index + directions[i], QUIET_ROOK_PROMOTION));
                         list.push_back(ChessMove(index, index + directions[i], QUIET_QUEEN_PROMOTION));
+                    }
+                }
+
+                // En passant
+                for(int i = 0; i < 2; i++)
+                {
+                    if(chessPosition[index]->getRank() == 4 && chessPosition[index - directions[i]] == nullptr &&
+                            index - directions[i] == chessPosition.getEnPassantValue())
+                    {
+                        list.push_back(ChessMove(index, index - directions[i], EN_PASSANT_CAPTURE));
                     }
                 }
             }
