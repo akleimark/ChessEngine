@@ -48,6 +48,11 @@ ChessPosition::ChessPosition()
     sideToMove = WHITE;
     moveGenerator = new MoveGenerator(*this);
     enPassantValue = OFF_THE_BOARD;
+
+    for(unsigned int index = 0; index < 4; index++)
+    {
+        castleRights[index] = true;
+    }
 }
 /**
  * @brief Den här konstruktorn skapar en schackposition utifrån en angiven fen-sträng.
@@ -163,6 +168,51 @@ ChessPosition::ChessPosition(const std::string &fenString)
     {
         sideToMove = BLACK;
     }
+
+    if(!(list[2].length() == 4 || list[2].length() == 1))
+    {
+        throw std::runtime_error("Felaktig fen-sträng.");
+    }
+
+    if(list[2].length() == 1)
+    {
+        if(list[2] == "-")
+        {
+            castleRights[0] = false;
+            castleRights[1] = false;
+            castleRights[2] = false;
+            castleRights[3] = false;
+        }
+        else
+        {
+            throw std::runtime_error("Felaktig fen-sträng.");
+        }
+    }
+    const std::string CASTLE_RIGHTS = "KQkq";
+    for(int index = 0; index < 4; index++)
+    {
+        try
+        {
+            if(list[2][index] == CASTLE_RIGHTS[index])
+            {
+                castleRights[index] = true;
+            }
+            else if(list[2][index] == '-')
+            {
+                castleRights[index] = false;
+            }
+            else
+            {
+                throw std::runtime_error("Felaktig fen-sträng.");
+            }
+        }
+        catch(const std::out_of_range &error)
+        {
+            throw std::runtime_error("Felaktig fen-sträng.");
+        }
+
+    }
+
     try
     {
         enPassantValue = ChessPosition::getSquareNumber(list[3]);
@@ -181,17 +231,9 @@ ChessPosition::ChessPosition(const ChessPosition &chessPosition)
     sideToMove = chessPosition.sideToMove;
     moveGenerator = new MoveGenerator(*this);
     enPassantValue = chessPosition.enPassantValue;
+    memcpy(castleRights, chessPosition.castleRights, 4 * sizeof(*chessPosition.castleRights));
 }
 
-ChessPosition::ChessPosition(ChessPosition &&chessPosition)
-{
-    std::cout << "Move constructor" << std::endl;
-    sideToMove = chessPosition.sideToMove;
-    moveGenerator = nullptr;
-    enPassantValue = chessPosition.enPassantValue;
-    moveGenerator = nullptr;
-    squares = nullptr;
-}
 
 ChessPosition::~ChessPosition()
 {
@@ -215,6 +257,7 @@ ChessPosition ChessPosition::operator=(const ChessPosition &chessPosition)
     sideToMove = chessPosition.sideToMove;
     moveGenerator = new MoveGenerator(*this);
     enPassantValue = chessPosition.enPassantValue;
+    memcpy(castleRights, chessPosition.castleRights, 4 * sizeof(*chessPosition.castleRights));
     return *this;
 }
 /**
@@ -354,6 +397,23 @@ std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
         os << "black";
     }
 
-    os << std::endl << "EnPassant: " << ChessPosition::getSquareName(chessPosition.getEnPassantValue()) << std::endl;
+    os << std::endl << "En passant: " << ChessPosition::getSquareName(chessPosition.getEnPassantValue()) << std::endl;
+
+    std::string castleRightsString = "";
+    const std::string CASTLE_RIGHTS = "KQkq";
+    for(int index = 0; index < 4; index++)
+    {
+        if(chessPosition.getCastleRight(index) == true)
+        {
+            castleRightsString += CASTLE_RIGHTS[index];
+        }
+    }
+    if(castleRightsString == "----")
+    {
+        castleRightsString = "-";
+    }
+
+
+    os << "Castle rights: " << castleRightsString << std::endl;
     return os;
 }

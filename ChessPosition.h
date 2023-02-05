@@ -11,8 +11,7 @@ class ChessPosition
     public:
         ChessPosition();
         explicit ChessPosition(const std::string &fenString);
-        ChessPosition(const ChessPosition &chessPosition);
-        ChessPosition(ChessPosition &&chessPosition);
+        ChessPosition(const ChessPosition &chessPosition);        
         ~ChessPosition();
         ChessPosition operator=(const ChessPosition &chessPosition);
         bool static isOffTheBoard(const unsigned int &squareIndex) { return squareIndex & 0x88; }
@@ -27,11 +26,13 @@ class ChessPosition
         void setEnPassantValue(const unsigned int &pEnPassantValue) { enPassantValue = pEnPassantValue; }
         MoveGenerator* getMoveGenerator() { return moveGenerator; }
         unsigned int getColor(const unsigned &index) const;
+        bool getCastleRight(const unsigned int &index) const { return castleRights[index]; }
 
     private:
         ChessPiece** squares;
         int sideToMove;
         int enPassantValue;
+        bool castleRights[4];
         MoveGenerator *moveGenerator;
 };
 
