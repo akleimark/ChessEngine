@@ -275,6 +275,18 @@ unsigned int ChessPosition::getColor(const unsigned int &index) const
     return squares[index]->getColor();
 }
 
+void ChessPosition::switchSide()
+{
+    if(sideToMove == WHITE)
+    {
+        sideToMove = BLACK;
+    }
+    else
+    {
+        sideToMove = WHITE;
+    }
+}
+
 /**
  * @brief Den här funktionen körs varje gång, som ett drag utförs.
  * @param chessMove: den här parametern anger vilket schackdrag som skall utföras.
@@ -284,6 +296,22 @@ void ChessPosition::makeMove(const ChessMove &chessMove)
     const int FROM_SQUARE = chessMove.getFromSquare();
     const int TO_SQUARE = chessMove.getToSquare();
 
+    if(chessMove.getFlag() == DOUBLE_PAWN_MOVE)
+    {
+        if(sideToMove == WHITE)
+        {
+            enPassantValue = FROM_SQUARE + 16;
+        }
+        else
+        {
+            enPassantValue = FROM_SQUARE - 16;
+        }
+    }
+    else
+    {
+        enPassantValue = OFF_THE_BOARD;
+    }
+
     if(squares[TO_SQUARE] != nullptr)
     {
         delete squares[TO_SQUARE];
@@ -292,6 +320,8 @@ void ChessPosition::makeMove(const ChessMove &chessMove)
     squares[FROM_SQUARE]->setLocation(TO_SQUARE);
     squares[TO_SQUARE] = squares[FROM_SQUARE];
     squares[FROM_SQUARE] = nullptr;
+
+    switchSide();
 }
 
 /**
@@ -386,7 +416,7 @@ std::ostream &operator<<(std::ostream& os, const ChessPosition &chessPosition)
             }
         }
     }
-    os << "--------------------------------------------------------------------------------" << std::endl
+    os << "\n--------------------------------------------------------------------------------" << std::endl
        << "Side to move: ";
     if(chessPosition.getSideToMove() == WHITE)
     {

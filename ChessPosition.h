@@ -27,6 +27,7 @@ class ChessPosition
         MoveGenerator* getMoveGenerator() { return moveGenerator; }
         unsigned int getColor(const unsigned &index) const;
         bool getCastleRight(const unsigned int &index) const { return castleRights[index]; }
+        void switchSide();
 
     private:
         ChessPiece** squares;
