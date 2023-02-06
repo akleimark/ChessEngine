@@ -9,6 +9,11 @@ MoveGenerator::MoveGenerator(const ChessPosition &pChessPosition):
 
 void MoveGenerator::generate(const int &side)
 {
+    if(!(side == WHITE || side == BLACK))
+    {
+        throw std::runtime_error("Felaktig ställning. Vit eller svart måste vara vid draget.");
+    }
+
     for(unsigned int index = a1; index < h8; index++)
     {
         if(chessPosition[index] == nullptr || ChessPosition::isOffTheBoard(index) || chessPosition[index]->getColor() != side)
@@ -34,6 +39,36 @@ void MoveGenerator::generate(const int &side)
                     list.push_back(ChessMove(index, index + directions[i], CAPTURE_MOVE));
                 }
             }
+            // Rockad.
+            if(side == WHITE)
+            {
+                if(chessPosition[e1] != nullptr && chessPosition[e1]->getColor() == WHITE && chessPosition[e1]->getType() == KING
+                        && chessPosition[f1] == nullptr && chessPosition[g1] == nullptr && chessPosition.getCastleRight(0) == true)
+                {
+                    list.push_back(ChessMove(e1, g1, CASTLE_MOVE));
+                }
+                if(chessPosition[e1] != nullptr && chessPosition[e1]->getColor() == WHITE && chessPosition[e1]->getType() == KING
+                        && chessPosition[d1] == nullptr && chessPosition[c1] == nullptr && chessPosition[b1] == nullptr
+                        && chessPosition.getCastleRight(1) == true)
+                {
+                    list.push_back(ChessMove(e1, c1, CASTLE_MOVE));
+                }
+            }
+            else
+            {
+                if(chessPosition[e8] != nullptr && chessPosition[e8]->getColor() == BLACK && chessPosition[e8]->getType() == KING
+                        && chessPosition[f8] == nullptr && chessPosition[g8] == nullptr && chessPosition.getCastleRight(2) == true)
+                {
+                    list.push_back(ChessMove(e8, g8, CASTLE_MOVE));
+                }
+                if(chessPosition[e8] != nullptr && chessPosition[e8]->getColor() == BLACK && chessPosition[e8]->getType() == KING
+                        && chessPosition[d8] == nullptr && chessPosition[c8] == nullptr && chessPosition[b8] == nullptr
+                        && chessPosition.getCastleRight(3) == true)
+                {
+                    list.push_back(ChessMove(e8, c8, CASTLE_MOVE));
+                }
+            }
+
         }
         //Springardrag
         if(chessPosition[index]->getType() == KNIGHT)
